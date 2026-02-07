@@ -25,38 +25,38 @@ function Login({ setToken, setUser }) {   // 👈 props add kiya
     e.preventDefault();
     if (!validate()) return;
 
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/api/auth/login`,
+      {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        // ✅ localStorage save
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-
-        // ✅ state update → App.js turant rerender hoga
-        setToken(data.token);
-        setUser(data.user);
-
-        // ✅ redirect
-        if (data.user.role === "admin") {
-          navigate("/admin/dashboard");
-        } else {
-          navigate("/profile");
-        }
-      } else {
-        alert(data.msg || "Invalid credentials");
       }
-    } catch (err) {
-      console.error("Error:", err);
-      alert("Something went wrong!");
+    );
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      alert(data.msg || "Invalid credentials");
+      return;
+    }
+
+    // save token + user
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+
+    // update app state
+    setToken(data.token);
+    setUser(data.user);
+
+    // redirect
+    if (data.user.role === "admin") {
+      navigate("/admin/dashboard");
+    } else {
+      navigate("/profile");
     }
   }
+
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-6">

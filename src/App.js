@@ -9,17 +9,20 @@ import Service from "./components/Service";
 import Contact from "./components/Contact";
 import Profile from "./components/Profile";
 import AdminDashboard from "./components/AdminDashboard";
+import PrivateRoute from "./components/PrivateRoute";
+import AdminRoute from "./components/AdminRoute";
+
 import "./index.css";
 
 function App() {
-  const [token, setToken] = useState(null);
-  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user"))
+  );
 
-  // 👇 page refresh pe data restore
   useEffect(() => {
     const t = localStorage.getItem("token");
     const u = localStorage.getItem("user");
-
     if (t && u) {
       setToken(t);
       setUser(JSON.parse(u));
@@ -35,7 +38,6 @@ function App() {
           <Route path="/services" element={<Service />} />
           <Route path="/register" element={<Register />} />
 
-          {/* 👇 props pass karo */}
           <Route
             path="/login"
             element={<Login setToken={setToken} setUser={setUser} />}
@@ -43,13 +45,11 @@ function App() {
 
           <Route path="/contact" element={<Contact />} />
 
-          {/* 🔒 Donor */}
           <Route
             path="/profile"
             element={token ? <Profile user={user} /> : <Navigate to="/login" />}
           />
 
-          {/* 🔒 Admin */}
           <Route
             path="/admin/dashboard"
             element={
@@ -58,6 +58,24 @@ function App() {
                 : <Navigate to="/login" />
             }
           />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile user={user} />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+
+
         </Routes>
       </Layout>
     </Router>
