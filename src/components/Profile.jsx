@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Heart, DollarSign, Award, LogOut, Calendar, Droplet, MapPin } from "lucide-react";
+import { Heart, DollarSign, Award, LogOut, Calendar, Droplet, MapPin, RefreshCw } from "lucide-react";
 
 function Profile() {
     const navigate = useNavigate();
@@ -226,7 +226,18 @@ function Profile() {
                 {/* Certificates */}
                 {activeTab === "certificates" && (
                     <div className="bg-white rounded-2xl shadow-xl p-8">
-                        <button onClick={() => setActiveTab("dashboard")} className="text-green-600 mb-4 hover:underline">← Back</button>
+                        <div className="flex justify-between items-center mb-6">
+                            <div className="flex items-center gap-3">
+                                <button onClick={() => setActiveTab("dashboard")} className="text-green-600 hover:underline">← Back</button>
+                            </div>
+                            <button 
+                                onClick={fetchCertificates}
+                                className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all"
+                            >
+                                <RefreshCw size={16} />
+                                Refresh
+                            </button>
+                        </div>
                         <div className="flex items-center gap-3 mb-6">
                             <Award size={32} className="text-green-600" />
                             <h2 className="text-3xl font-bold text-gray-800">Your Certificates</h2>
