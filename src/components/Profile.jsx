@@ -8,6 +8,7 @@ function Profile() {
     const [activeTab, setActiveTab] = useState("blood");
     const [user, setUser] = useState(null);
     const [certificates, setCertificates] = useState([]);
+    const [loadingCerts, setLoadingCerts] = useState(false);
 
     /* ================= LOAD USER ================= */
     useEffect(() => {
@@ -29,6 +30,7 @@ function Profile() {
 
     /* ================= FETCH CERTIFICATES ================= */
     const fetchCertificates = useCallback(async () => {
+        setLoadingCerts(true);
         try {
             const res = await fetch(
                 `${process.env.REACT_APP_API_URL}/api/certificates`,
@@ -40,16 +42,22 @@ function Profile() {
             );
 
             const data = await res.json();
-            if (res.ok) {
+            console.log("Certificates API response:", data); // 🔍 DEBUG
+
+            if (res.ok && Array.isArray(data)) {
                 setCertificates(data);
             } else {
                 setCertificates([]);
             }
         } catch (err) {
             console.error("Certificate fetch error:", err);
+            setCertificates([]);
+        } finally {
+            setLoadingCerts(false);
         }
     }, []);
 
+    /* Fetch certificates when tab opens */
     useEffect(() => {
         if (activeTab === "certificates") {
             fetchCertificates();
@@ -62,12 +70,11 @@ function Profile() {
         navigate("/login");
     };
 
-    /* ================= DOWNLOAD CERTIFICATE ================= */
+    /* ================= DOWNLOAD CERTIFICATE PDF ================= */
     const downloadCertificate = (cert) => {
         const url = `${process.env.REACT_APP_API_URL}/api/certificates/download/${cert._id}`;
         window.open(url, "_blank");
     };
-
 
     return (
         <div className="flex min-h-screen">
@@ -126,7 +133,9 @@ function Profile() {
                     <div>
                         <h2 className="text-xl font-semibold mb-4">Certificates</h2>
 
-                        {certificates.length === 0 ? (
+                        {loadingCerts ? (
+                            <p>Loading certificates...</p>
+                        ) : certificates.length === 0 ? (
                             <p>No certificates found</p>
                         ) : (
                             certificates.map((cert) => (
@@ -144,13 +153,17 @@ function Profile() {
                                         {cert.bloodGroup}
                                     </p>
 
+                                    <p>
+                                        <strong>Donation Date:</strong>{" "}
+                                        {new Date(cert.donationDate).toLocaleDateString()}
+                                    </p>
+
                                     <button
                                         onClick={() => downloadCertificate(cert)}
-                                        className="text-blue-600 underline"
+                                        className="text-blue-600 underline mt-2"
                                     >
-                                        Download Certificate
+                                        Download Certificate (PDF)
                                     </button>
-
                                 </div>
                             ))
                         )}
