@@ -85,28 +85,7 @@ function Profile() {
     }
 
     const downloadCertificate = (cert) => {
-        const content = `
-BLOOD DONATION CERTIFICATE
-==========================
-
-Certificate ID: ${cert.certificateId}
-Donor Name: ${cert.donorName}
-Blood Group: ${cert.bloodGroup}
-Donation Date: ${new Date(cert.donationDate).toLocaleDateString()}
-Issued Date: ${new Date(cert.issuedDate).toLocaleDateString()}
-
-Thank you for saving lives!
-Caredrop Foundation ${new Date().getFullYear()}
-        `;
-        const blob = new Blob([content], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Certificate-${cert.certificateId}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        window.open(`${process.env.REACT_APP_API_URL}/api/certificates/download/${cert._id}`, '_blank');
     };
 
     return (
