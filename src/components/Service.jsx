@@ -6,7 +6,7 @@ const Service = () => {
     <section className="py-20 px-4 text-center bg-gray-200">
       <h2 className="text-3xl font-semibold mb-8">Our Services</h2>
       <p className="text-lg max-w-2xl mx-auto mb-6">
-        At Caredrop, we offer a wide range of healthcare services to ensure that you receive the best care possible. 
+        At Caredrop, we offer a wide range of healthcare services to ensure that you receive the best care possible.
         Here are some of the key services we provide:
       </p>
 
@@ -29,3 +29,5 @@ const Service = () => {
 };
 
 export default Service;
+
+

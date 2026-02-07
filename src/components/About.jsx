@@ -5,28 +5,28 @@ const About = () => {
   return (
     <div className="font-sans bg-gray-100">
       {/* Header Section (Optional if using Layout with header) */}
-      
+
 
       {/* About Section */}
       <section className="py-20 px-4 text-center bg-gray-200">
         <h2 className="text-3xl font-semibold mb-8">About Caredrop</h2>
         <p className="text-lg max-w-2xl mx-auto mb-6">
-          Caredrop is revolutionizing the way healthcare is delivered. Our platform connects you with healthcare professionals 
-          in real time, making healthcare more accessible, affordable, and efficient. Whether you need a quick consultation, 
+          Caredrop is revolutionizing the way healthcare is delivered. Our platform connects you with healthcare professionals
+          in real time, making healthcare more accessible, affordable, and efficient. Whether you need a quick consultation,
           long-term care advice, or access to your medical records, Caredrop brings healthcare to your fingertips.
         </p>
 
         <h3 className="text-2xl font-semibold mb-6">Our Mission</h3>
         <p className="text-lg max-w-2xl mx-auto mb-6">
-          At Caredrop, our mission is to make healthcare accessible and affordable to everyone. We believe that healthcare should 
-          be simple, transparent, and accessible from anywhere. By utilizing technology and a network of healthcare professionals, 
+          At Caredrop, our mission is to make healthcare accessible and affordable to everyone. We believe that healthcare should
+          be simple, transparent, and accessible from anywhere. By utilizing technology and a network of healthcare professionals,
           we aim to provide the best possible care for our users.
         </p>
 
         <h3 className="text-2xl font-semibold mb-6">Our Vision</h3>
         <p className="text-lg max-w-2xl mx-auto mb-6">
-          We envision a world where healthcare is not limited by location, time, or financial constraints. Caredrop seeks to break 
-          down barriers by offering telemedicine consultations, secure medical record storage, and an ever-growing network of trusted 
+          We envision a world where healthcare is not limited by location, time, or financial constraints. Caredrop seeks to break
+          down barriers by offering telemedicine consultations, secure medical record storage, and an ever-growing network of trusted
           healthcare providers.
         </p>
 
@@ -58,7 +58,7 @@ const About = () => {
         </a>
       </section>
 
-      
+
     </div>
   );
 };

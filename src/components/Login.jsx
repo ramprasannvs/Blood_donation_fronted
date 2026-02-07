@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";  // Import Link from react-router-dom
+import { Link, useNavigate } from "react-router-dom";
 
-export default function Login() {
-  const [form, setForm] = useState({ email: "", password: "" });
+function Login({ setToken, setUser }) {   // 👈 props add kiya
+  const [form, setForm] = useState({ email: "", password: "", role: "donor" });
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -12,21 +13,49 @@ export default function Login() {
 
   function validate() {
     const e = {};
-    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/.test(form.email)) {
+    if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,}$/.test(form.email))
       e.email = "Enter a valid email";
-    }
-    if (form.password.length < 6) {
+    if (form.password.length < 6)
       e.password = "Password must be at least 6 characters";
-    }
     setErrors(e);
     return Object.keys(e).length === 0;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!validate()) return;
-    alert("Login successful! 🚀");
-    console.log("Login payload:", form);
+
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        // ✅ localStorage save
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        // ✅ state update → App.js turant rerender hoga
+        setToken(data.token);
+        setUser(data.user);
+
+        // ✅ redirect
+        if (data.user.role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/profile");
+        }
+      } else {
+        alert(data.msg || "Invalid credentials");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Something went wrong!");
+    }
   }
 
   return (
@@ -68,7 +97,30 @@ export default function Login() {
             )}
           </div>
 
-          {/* Submit Button */}
+          {/* Role */}
+          <div className="flex justify-center space-x-6">
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                name="role"
+                value="donor"
+                checked={form.role === "donor"}
+                onChange={handleChange}
+              />
+              <span>Donor</span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                name="role"
+                value="admin"
+                checked={form.role === "admin"}
+                onChange={handleChange}
+              />
+              <span>Admin</span>
+            </label>
+          </div>
+
           <button
             type="submit"
             className="w-full py-3 bg-orange-400 text-white rounded-lg font-medium hover:bg-orange-300 transition"
@@ -77,14 +129,23 @@ export default function Login() {
           </button>
         </form>
 
-        {/* Extra Links */}
+        {/* Login.js mein Forgot Password link add karo */}
         <div className="mt-4 text-center text-sm text-gray-600">
-          Don’t have an account?{" "}
+          Don't have an account?{" "}
           <Link to="/register" className="text-red-500 font-medium hover:underline">
             Register
+          </Link>
+
+          {/* <span className="mx-2">•</span> */}
+          <br />
+
+          <Link to="/forgot-password" className="text-red-500 font-medium hover:underline">
+            Forgot Password
           </Link>
         </div>
       </div>
     </div>
   );
 }
+
+export default Login;
