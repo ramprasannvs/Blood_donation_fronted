@@ -56,7 +56,6 @@ function AdminDashboard() {
                 throw new Error("Failed to update status");
             }
 
-            const result = await res.json();
             alert("Status updated successfully!");
             fetchDonations(); // Refresh list
         } catch (err) {
