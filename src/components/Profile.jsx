@@ -7,8 +7,30 @@ function Profile() {
     const [user, setUser] = useState(null);
     const [certificates, setCertificates] = useState([]);
 
+    // 🔧 Fetch certificates (defined BEFORE useEffect)
+    const fetchCertificates = useCallback(async () => {
+        try {
+            const res = await fetch(
+                `http://localhost:8080/api/blood-donation/certificates/${user?.id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
 
+            if (res.ok) {
+                const data = await res.json();
+                setCertificates(data);
+            } else {
+                console.log("No certificates found");
+            }
+        } catch (err) {
+            console.error("Error fetching certificates:", err);
+        }
+    }, [user]);
 
+    // ✅ Load user from localStorage
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
@@ -24,8 +46,7 @@ function Profile() {
         }
     }, [navigate]);
 
-
-    // ✅ Fetch certificates when certificates tab is active
+    // ✅ Fetch certificates when tab is active
     useEffect(() => {
         if (activeTab === "certificates" && user) {
             fetchCertificates();
@@ -36,96 +57,6 @@ function Profile() {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         navigate("/login");
-    }
-
-    // 🔧 ONLY FIX: wrapped with useCallback
-    const fetchCertificates = useCallback(async () => {
-        try {
-            const res = await fetch(
-                `http://localhost:8080/api/blood-donation/certificates/${user?.id}`,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("token")}`
-                    }
-                }
-            );
-
-            if (res.ok) {
-                const data = await res.json();
-                setCertificates(data);
-            } else {
-                console.log("No certificates found");
-            }
-        } catch (err) {
-            console.error("Error fetching certificates:", err);
-        }
-    }, [user]);
-
-    // Blood Donation Submit
-    async function handleBloodSubmit(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData);
-
-        try {
-            const res = await fetch("http://localhost:8080/api/blood-donation/submit", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                },
-                body: JSON.stringify({
-                    bloodGroup: data.bloodGroup,
-                    donationDate: data.date,
-                    location: data.location
-                }),
-            });
-
-            const result = await res.json();
-
-            if (res.ok) {
-                alert("✅ Blood donation submitted for approval!");
-                setActiveTab("dashboard");
-            } else {
-                alert("❌ " + result.msg);
-            }
-        } catch (err) {
-            console.error(err);
-            alert("⚠️ Backend connection failed! Check if server is running on port 8080");
-        }
-    }
-
-    // Money Donation Submit
-    async function handleMoneySubmit(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData);
-
-        try {
-            const res = await fetch("http://localhost:8080/api/money-donation/submit", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
-                },
-                body: JSON.stringify({
-                    amount: data.amount,
-                    purpose: data.purpose
-                }),
-            });
-
-            const result = await res.json();
-
-            if (res.ok) {
-                alert("✅ Money donation submitted successfully!");
-                setActiveTab("dashboard");
-            } else {
-                alert("❌ " + result.msg);
-            }
-        } catch (err) {
-            console.error(err);
-            alert("⚠️ Something went wrong!");
-        }
     }
 
     // Download Certificate
@@ -142,9 +73,9 @@ Issued Date: ${new Date(certificate.issuedDate).toLocaleDateString()}
 Thank you for saving lives!
         `;
 
-        const blob = new Blob([certificateContent], { type: 'text/plain' });
+        const blob = new Blob([certificateContent], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
         a.download = `Certificate-${certificate.certificateId}.txt`;
         document.body.appendChild(a);
@@ -158,10 +89,18 @@ Thank you for saving lives!
             {/* Sidebar */}
             <aside className="w-64 bg-gray-100 p-6 space-y-4">
                 <h2 className="font-bold text-lg">Menu</h2>
-                <button onClick={() => setActiveTab("bloodDonate")}>Blood Donation</button>
-                <button onClick={() => setActiveTab("moneyDonate")}>Money Donation</button>
-                <button onClick={() => setActiveTab("certificates")}>Certificates</button>
-                <button onClick={handleLogout} className="text-red-600">Logout</button>
+                <button onClick={() => setActiveTab("bloodDonate")}>
+                    Blood Donation
+                </button>
+                <button onClick={() => setActiveTab("moneyDonate")}>
+                    Money Donation
+                </button>
+                <button onClick={() => setActiveTab("certificates")}>
+                    Certificates
+                </button>
+                <button onClick={handleLogout} className="text-red-600">
+                    Logout
+                </button>
             </aside>
 
             {/* Main Area */}
@@ -175,10 +114,12 @@ Thank you for saving lives!
                         {certificates.length === 0 ? (
                             <p>No certificates found</p>
                         ) : (
-                            certificates.map(cert => (
+                            certificates.map((cert) => (
                                 <div key={cert._id}>
                                     <p>{cert.certificateId}</p>
-                                    <button onClick={() => downloadCertificate(cert)}>
+                                    <button
+                                        onClick={() => downloadCertificate(cert)}
+                                    >
                                         Download Certificate
                                     </button>
                                 </div>
