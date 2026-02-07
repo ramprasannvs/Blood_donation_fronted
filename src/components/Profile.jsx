@@ -71,10 +71,37 @@ function Profile() {
     };
 
     /* ================= DOWNLOAD CERTIFICATE PDF ================= */
-    const downloadCertificate = (cert) => {
-        const url = `${process.env.REACT_APP_API_URL}/api/certificates/download/${cert._id}`;
-        window.open(url, "_blank");
+    const downloadCertificate = async (cert) => {
+        try {
+            const res = await fetch(
+                `${process.env.REACT_APP_API_URL}/api/certificates/download/${cert._id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+
+            if (!res.ok) {
+                throw new Error("Failed to download certificate");
+            }
+
+            const blob = await res.blob();
+
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `Certificate-${cert.certificateId}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error(err);
+            alert("Certificate download failed");
+        }
     };
+
 
     return (
         <div className="flex min-h-screen">
