@@ -17,15 +17,15 @@ const Layout = ({ children }) => {
   return (
     <div className="font-sans bg-gray-100 min-h-screen flex flex-col">
       {/* Header Section */}
-      <header className="bg-red-500 text-white p-6">
+      <header className="bg-red-500 text-white p-4 md:p-6">
         <div className="flex justify-between items-center">
           {/* Brand */}
-          <div className="text-xl font-bold flex space-x-4">
+          <div className="text-lg md:text-xl font-bold flex space-x-4">
             <Link to="/" className="hover:text-gray-300">Caredrop</Link>
           </div>
 
           {/* Navigation */}
-          <nav>
+          <nav className="hidden md:block">
             <ul className="flex space-x-8 items-center">
               {!user ? (
                 // ✅ Guest Navbar
@@ -79,6 +79,60 @@ const Layout = ({ children }) => {
               )}
             </ul>
           </nav>
+
+          {/* Mobile Menu Button */}
+          <button className="md:hidden text-white" onClick={() => document.getElementById('mobile-menu').classList.toggle('hidden')}>
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        <div id="mobile-menu" className="hidden md:hidden mt-4">
+          <ul className="flex flex-col space-y-2">
+            {!user ? (
+              <>
+                <li><Link to="/" className="block py-2 hover:bg-red-600 px-2 rounded">Home</Link></li>
+                <li><Link to="/about" className="block py-2 hover:bg-red-600 px-2 rounded">About</Link></li>
+                <li><Link to="/services" className="block py-2 hover:bg-red-600 px-2 rounded">Services</Link></li>
+                <li><Link to="/contact" className="block py-2 hover:bg-red-600 px-2 rounded">Contact</Link></li>
+                <li><Link to="/register" className="block py-2 hover:bg-red-600 px-2 rounded">Sign Up</Link></li>
+                <li><Link to="/login" className="block py-2 hover:bg-red-600 px-2 rounded">Sign In</Link></li>
+              </>
+            ) : user.role === "admin" ? (
+              <>
+                <li><Link to="/admin/dashboard" className="block py-2 hover:bg-red-600 px-2 rounded">Dashboard</Link></li>
+                <li><Link to="/about" className="block py-2 hover:bg-red-600 px-2 rounded">About</Link></li>
+                <li className="py-2 px-2">
+                  <span className="bg-blue-500 px-2 py-1 rounded text-xs mr-2">ADMIN</span>
+                  {user.name}
+                </li>
+                <li>
+                  <button onClick={handleLogout} className="w-full text-left py-2 hover:bg-red-600 px-2 rounded">
+                    Logout
+                  </button>
+                </li>
+              </>
+            ) : (
+              <>
+                <li><Link to="/" className="block py-2 hover:bg-red-600 px-2 rounded">Home</Link></li>
+                <li><Link to="/about" className="block py-2 hover:bg-red-600 px-2 rounded">About</Link></li>
+                <li><Link to="/services" className="block py-2 hover:bg-red-600 px-2 rounded">Services</Link></li>
+                <li><Link to="/contact" className="block py-2 hover:bg-red-600 px-2 rounded">Contact</Link></li>
+                <li><Link to="/profile" className="block py-2 hover:bg-red-600 px-2 rounded">Profile</Link></li>
+                <li className="py-2 px-2">
+                  <span className="bg-green-500 px-2 py-1 rounded text-xs mr-2">DONOR</span>
+                  {user.name}
+                </li>
+                <li>
+                  <button onClick={handleLogout} className="w-full text-left py-2 hover:bg-red-600 px-2 rounded">
+                    Logout
+                  </button>
+                </li>
+              </>
+            )}
+          </ul>
         </div>
       </header>
 

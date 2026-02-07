@@ -73,10 +73,10 @@ function AdminDashboard() {
     }
 
     return (
-        <div className="p-6">
+        <div className="p-4 md:p-6">
             {/* HEADER */}
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">Blood Donation Requests</h2>
+                <h2 className="text-xl md:text-2xl font-bold">Blood Donation Requests</h2>
 
                 {newRequests > 0 && (
                     <span className="bg-red-500 text-white px-3 py-1 rounded-full text-sm">

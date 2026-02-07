@@ -104,10 +104,10 @@ function Profile() {
 
 
     return (
-        <div className="flex min-h-screen">
+        <div className="flex flex-col md:flex-row min-h-screen">
             {/* ================= SIDEBAR ================= */}
-            <aside className="w-64 bg-gray-100 p-6 space-y-4">
-                <h2 className="font-bold text-lg">Menu</h2>
+            <aside className="w-full md:w-64 bg-gray-100 p-4 md:p-6 space-y-4">
+                <h2 className="font-bold text-lg hidden md:block">Menu</h2>
 
                 <button
                     className="block text-left w-full"
@@ -139,8 +139,8 @@ function Profile() {
             </aside>
 
             {/* ================= MAIN ================= */}
-            <main className="flex-1 p-8 bg-white">
-                <h1 className="text-2xl font-bold mb-6">
+            <main className="flex-1 p-4 md:p-8 bg-white">
+                <h1 className="text-xl md:text-2xl font-bold mb-6">
                     Welcome, {user?.name} 👋
                 </h1>
 

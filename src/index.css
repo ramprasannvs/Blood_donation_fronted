@@ -15,3 +15,29 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .profile-sidebar {
+    width: 100% !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    flex-direction: row !important;
+    padding: 0.5rem !important;
+  }
+  
+  .profile-main {
+    padding-bottom: 80px !important;
+  }
+  
+  table {
+    font-size: 0.875rem;
+  }
+  
+  .overflow-x-auto {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
