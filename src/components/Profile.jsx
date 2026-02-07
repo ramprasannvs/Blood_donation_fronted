@@ -64,28 +64,10 @@ function Profile() {
 
     /* ================= DOWNLOAD CERTIFICATE ================= */
     const downloadCertificate = (cert) => {
-        const content = `
-BLOOD DONATION CERTIFICATE
-
-Certificate ID: ${cert.certificateId}
-Donor Name: ${cert.donorName}
-Blood Group: ${cert.bloodGroup}
-Donation Date: ${new Date(cert.donationDate).toLocaleDateString()}
-Issued Date: ${new Date(cert.issuedDate).toLocaleDateString()}
-
-Thank you for saving lives!
-    `;
-
-        const blob = new Blob([content], { type: "text/plain" });
-        const url = URL.createObjectURL(blob);
-
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `Certificate-${cert.certificateId}.txt`;
-        a.click();
-
-        URL.revokeObjectURL(url);
+        const url = `${process.env.REACT_APP_API_URL}/api/certificates/download/${cert._id}`;
+        window.open(url, "_blank");
     };
+
 
     return (
         <div className="flex min-h-screen">
@@ -164,10 +146,11 @@ Thank you for saving lives!
 
                                     <button
                                         onClick={() => downloadCertificate(cert)}
-                                        className="text-blue-600 underline mt-2"
+                                        className="text-blue-600 underline"
                                     >
                                         Download Certificate
                                     </button>
+
                                 </div>
                             ))
                         )}
