@@ -84,8 +84,32 @@ function Profile() {
         }
     }
 
-    const downloadCertificate = (cert) => {
-        window.open(`${process.env.REACT_APP_API_URL}/api/certificates/download/${cert._id}`, '_blank');
+    const downloadCertificate = async (cert) => {
+        try {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/certificates/download/${cert._id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            
+            if (res.ok) {
+                const blob = await res.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Certificate-${cert.certificateId}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            } else {
+                alert('Failed to download certificate');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error downloading certificate');
+        }
     };
 
     return (
