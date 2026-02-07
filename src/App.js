@@ -12,6 +12,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./components/AdminRoute";
 
+
 import "./index.css";
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
               </AdminRoute>
             }
           />
+
 
         </Routes>
       </Layout>
