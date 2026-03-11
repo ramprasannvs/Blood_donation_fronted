@@ -32,18 +32,16 @@ function App() {
 
   return (
     <Router>
-      <Layout>
-        <Routes>
+      <Routes>
+        {/* Routes without Layout (no navbar) */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login setToken={setToken} setUser={setUser} />} />
+
+        {/* Routes with Layout (with navbar) */}
+        <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/services" element={<Service />} />
-          <Route path="/register" element={<Register />} />
-
-          <Route
-            path="/login"
-            element={<Login setToken={setToken} setUser={setUser} />}
-          />
-
           <Route path="/contact" element={<Contact />} />
 
           <Route
@@ -59,26 +57,8 @@ function App() {
                 : <Navigate to="/login" />
             }
           />
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                <Profile user={user} />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/admin/dashboard"
-            element={
-              <AdminRoute>
-                <AdminDashboard />
-              </AdminRoute>
-            }
-          />
-
-
-        </Routes>
-      </Layout>
+        </Route>
+      </Routes>
     </Router>
   );
 }

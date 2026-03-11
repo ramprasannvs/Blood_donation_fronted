@@ -34,7 +34,7 @@ function Register() {
 
   // Submit
   const handleSubmit = async (e) => {
-    e.preventDefault();  // 👈 ye add karna zaroori hai
+    e.preventDefault();
 
     if (!validate()) return;
 
@@ -47,7 +47,17 @@ function Register() {
 
       const data = await res.json();
       console.log("Response:", data);
-      alert(data.msg);
+      
+      if (data.success) {
+        alert(data.msg);
+      } else {
+        // Show custom message for admin registration attempt
+        if (res.status === 403) {
+          alert("Admin registration not allowed. Please register as Donor.");
+        } else {
+          alert(data.msg);
+        }
+      }
     } catch (err) {
       console.error("Error:", err);
       alert("Server error. Check backend connection.");

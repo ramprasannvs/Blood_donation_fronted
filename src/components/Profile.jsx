@@ -120,17 +120,10 @@ function Profile() {
                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                         <div>
                             <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-                                Welcome back, <span className="text-red-600">{user?.name || "Guest"}</span> 👋
+                                Dashboard
                             </h1>
                             <p className="text-gray-600 mt-1">Manage your donations and certificates</p>
                         </div>
-                        <button
-                            onClick={handleLogout}
-                            className="flex items-center gap-2 px-6 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all shadow-md hover:shadow-lg"
-                        >
-                            <LogOut size={20} />
-                            Logout
-                        </button>
                     </div>
                 </div>
 
@@ -219,7 +212,17 @@ function Profile() {
                             <DollarSign size={32} className="text-orange-600" />
                             <h2 className="text-3xl font-bold text-gray-800">Money Donation</h2>
                         </div>
-                        <p className="text-gray-600 text-center py-12">Payment integration coming soon...</p>
+                        <div className="text-center">
+                            <p className="text-gray-600 mb-6">Scan the QR code below to make a donation</p>
+                            <div className="flex justify-center mb-6">
+                                <img 
+                                    src={`${process.env.REACT_APP_API_URL}/uploads/WhatsApp Image 2026-03-11 at 10.43.01 AM.jpeg`}
+                                    alt="Payment QR Code"
+                                    className="w-64 h-64 object-contain border-4 border-orange-200 rounded-xl shadow-lg"
+                                />
+                            </div>
+                            <p className="text-gray-500 text-sm">Scan with any UPI app to donate</p>
+                        </div>
                     </div>
                 )}
 

@@ -135,13 +135,6 @@ function Login({ setToken, setUser }) {   // 👈 props add kiya
           <Link to="/register" className="text-red-500 font-medium hover:underline">
             Register
           </Link>
-
-          {/* <span className="mx-2">•</span> */}
-          <br />
-
-          <Link to="/forgot-password" className="text-red-500 font-medium hover:underline">
-            Forgot Password
-          </Link>
         </div>
       </div>
     </div>

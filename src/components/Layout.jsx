@@ -2,9 +2,9 @@
 
 
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Outlet } from "react-router-dom";
 
-const Layout = ({ children }) => {
+const Layout = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -38,7 +38,7 @@ const Layout = ({ children }) => {
                   <li><Link to="/login" className="hover:text-gray-300">Sign In</Link></li>
                 </>
               ) : user.role === "admin" ? (
-                // ✅ Admin Navbar (FIXED - No duplicate items)
+                // ✅ Admin Navbar
                 <>
                   <li><Link to="/admin/dashboard" className="hover:text-gray-300">Dashboard</Link></li>
                   <li><Link to="/about" className="hover:text-gray-300">About</Link></li>
@@ -56,7 +56,7 @@ const Layout = ({ children }) => {
                   </li>
                 </>
               ) : (
-                // ✅ Donor Navbar (Regular User)
+                // ✅ Donor Navbar
                 <>
                   <li><Link to="/" className="hover:text-gray-300">Home</Link></li>
                   <li><Link to="/about" className="hover:text-gray-300">About</Link></li>
@@ -142,7 +142,7 @@ const Layout = ({ children }) => {
           className="absolute top-0 left-0 right-0 bottom-0 bg-cover bg-center"
           style={{ backgroundImage: `url('/assets/bgimage.png')`, zIndex: -1 }}
         ></div>
-        {children}
+        <Outlet />
       </main>
 
       {/* Footer Section */}
