@@ -9,8 +9,6 @@ import Service from "./components/Service";
 import Contact from "./components/Contact";
 import Profile from "./components/Profile";
 import AdminDashboard from "./components/AdminDashboard";
-import PrivateRoute from "./components/PrivateRoute";
-import AdminRoute from "./components/AdminRoute";
 
 
 import "./index.css";

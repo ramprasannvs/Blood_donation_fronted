@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Heart, DollarSign, Award, LogOut, Calendar, Droplet, MapPin, RefreshCw } from "lucide-react";
+import { Heart, DollarSign, Award, Calendar, Droplet, MapPin, RefreshCw } from "lucide-react";
 
 function Profile() {
     const navigate = useNavigate();
@@ -30,10 +30,6 @@ function Profile() {
         }
     }, [activeTab, user]);
 
-    function handleLogout() {
-        localStorage.clear();
-        navigate("/login");
-    }
 
     async function fetchCertificates() {
         setLoadingCerts(true);
@@ -92,7 +88,7 @@ function Profile() {
                     Authorization: `Bearer ${token}`
                 }
             });
-            
+
             if (res.ok) {
                 const blob = await res.blob();
                 const url = window.URL.createObjectURL(blob);
@@ -215,7 +211,7 @@ function Profile() {
                         <div className="text-center">
                             <p className="text-gray-600 mb-6">Scan the QR code below to make a donation</p>
                             <div className="flex justify-center mb-6">
-                                <img 
+                                <img
                                     src={`${process.env.REACT_APP_API_URL}/uploads/WhatsApp Image 2026-03-11 at 10.43.01 AM.jpeg`}
                                     alt="Payment QR Code"
                                     className="w-64 h-64 object-contain border-4 border-orange-200 rounded-xl shadow-lg"
@@ -233,7 +229,7 @@ function Profile() {
                             <div className="flex items-center gap-3">
                                 <button onClick={() => setActiveTab("dashboard")} className="text-green-600 hover:underline">← Back</button>
                             </div>
-                            <button 
+                            <button
                                 onClick={fetchCertificates}
                                 className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all"
                             >
